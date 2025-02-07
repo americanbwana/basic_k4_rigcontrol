@@ -28,15 +28,17 @@ class BandGrid extends StatelessWidget {
       itemBuilder: (context, index) {
         final band = BandInfo.bands[index];
         final isSelected = band.value == currentBand;
-        
+
         return ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor: isSelected ? Theme.of(context).colorScheme.primary : null,
-            foregroundColor: isSelected ? Theme.of(context).colorScheme.onPrimary : null,
+            backgroundColor:
+                isSelected ? Theme.of(context).colorScheme.primary : null,
+            foregroundColor:
+                isSelected ? Theme.of(context).colorScheme.onPrimary : null,
           ),
           onPressed: () => onBandSelected(band.value),
           child: Text(
-            band.name,
+            band.display, // Changed from band.name to band.display
             style: Theme.of(context).textTheme.titleMedium,
           ),
         );

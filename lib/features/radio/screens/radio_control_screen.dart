@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/radio_provider.dart';
 import '../widgets/vfo_display.dart';
 import '../widgets/mode_selector.dart';
-import '../widgets/band_grid.dart';
 import '../widgets/frequency_input.dart';
 import '../widgets/connection_status.dart';
+import '../widgets/band_selector.dart';
 
 class RadioControlScreen extends ConsumerWidget {
   const RadioControlScreen({super.key});
@@ -49,8 +49,8 @@ class RadioControlScreen extends ConsumerWidget {
                       onModeSelected: (mode) => ref.read(radioStateProvider.notifier).setModeA(mode),
                       isVfoB: false,
                     ),
-                    const SizedBox(height: 16),
-                    BandGrid(
+                    const SizedBox(height: 8),
+                    BandSelector(
                       currentBand: radioState.vfoA.band,
                       onBandSelected: (band) => ref.read(radioStateProvider.notifier).setBandA(band),
                       isVfoB: false,
@@ -80,8 +80,8 @@ class RadioControlScreen extends ConsumerWidget {
                       onModeSelected: (mode) => ref.read(radioStateProvider.notifier).setModeB(mode),
                       isVfoB: true,
                     ),
-                    const SizedBox(height: 16),
-                    BandGrid(
+                    const SizedBox(height: 8),
+                    BandSelector(
                       currentBand: radioState.vfoB.band,
                       onBandSelected: (band) => ref.read(radioStateProvider.notifier).setBandB(band),
                       isVfoB: true,

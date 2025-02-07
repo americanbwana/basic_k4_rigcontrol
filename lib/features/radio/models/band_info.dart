@@ -1,25 +1,25 @@
 class BandInfo {
   final int value;
-  final String name;
+  final String display;
   final int defaultFreq;
 
   const BandInfo({
     required this.value,
-    required this.name,
+    required this.display,
     required this.defaultFreq,
   });
 
   static final List<BandInfo> bands = [
-    BandInfo(value: 0, name: '160', defaultFreq: 1840000),
-    BandInfo(value: 1, name: '80', defaultFreq: 3573000),
-    BandInfo(value: 2, name: '60', defaultFreq: 5357000),
-    BandInfo(value: 3, name: '40', defaultFreq: 7074000),
-    BandInfo(value: 4, name: '30', defaultFreq: 10136000),
-    BandInfo(value: 5, name: '20', defaultFreq: 14074000),
-    BandInfo(value: 6, name: '17', defaultFreq: 18100000),
-    BandInfo(value: 7, name: '15', defaultFreq: 21074000),
-    BandInfo(value: 8, name: '12', defaultFreq: 24915000),
-    BandInfo(value: 9, name: '10', defaultFreq: 28074000),
-    BandInfo(value: 10, name: '6', defaultFreq: 50313000),
+    const BandInfo(value: 0, display: '160m', defaultFreq: 1840000),
+    const BandInfo(value: 1, display: '80m', defaultFreq: 3573000),
+    const BandInfo(value: 2, display: '60m', defaultFreq: 5357000),
+    const BandInfo(value: 3, display: '40m', defaultFreq: 7074000),
+    const BandInfo(value: 4, display: '30m', defaultFreq: 10136000),
+    const BandInfo(value: 5, display: '20m', defaultFreq: 14074000),
+    const BandInfo(value: 6, display: '17m', defaultFreq: 18100000),
+    const BandInfo(value: 7, display: '15m', defaultFreq: 21074000),
+    const BandInfo(value: 8, display: '12m', defaultFreq: 24915000),
+    const BandInfo(value: 9, display: '10m', defaultFreq: 28074000),
+    const BandInfo(value: 10, display: '6m', defaultFreq: 50313000),
   ];
 }
