@@ -12,6 +12,13 @@ class RadioCommands {
     }
     return 10; // Default power
   }
+
+  // add filter width commands
+  static String getFilterWidthA() => 'SH;';
+  static String getFilterWidthB() => 'SH\$;';
+  static String setFilterWidthA(int width) => 'SH${width.toString().padLeft(4, '0')};';
+  static String setFilterWidthB(int width) => 'SH\$${width.toString().padLeft(4, '0')};';
+  
   // Commands to get current state
   static String getFrequencyA() => 'FA;';
   static String getFrequencyB() => 'FB;';
@@ -39,6 +46,18 @@ class RadioCommands {
       return int.parse(freqStr);
     }
     return 0;
+  }
+
+// add filter width parsing
+  static int parseFilterWidth(String response) {
+    if (!response.endsWith(';')) {
+      response += ';';
+    }
+    final match = RegExp(r'SH[\$]?(\d+);').firstMatch(response);
+    if (match != null) {
+      return int.parse(match.group(1)!);
+    }
+    return 2400;
   }
 
   static String formatFrequency(int frequency) {

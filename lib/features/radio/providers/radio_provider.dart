@@ -37,7 +37,7 @@ class RadioStateNotifier extends StateNotifier<RadioState> {
   Future<void> _getInitialState() async {
     final completer = Completer<void>();
     var responsesReceived = 0;
-    const expectedResponses = 7; // FA, FB, MD, MD$, BN, BN$, PC
+    const expectedResponses = 9; // FA, FB, MD, MD$, BN, BN$, PC, SH, SH$
 
     void handleInitialResponse(String response) {
       _handleResponse(response);
@@ -56,6 +56,8 @@ class RadioStateNotifier extends StateNotifier<RadioState> {
     _service.sendCommand(RadioCommands.getBandA());
     _service.sendCommand(RadioCommands.getBandB());
     _service.sendCommand(RadioCommands.getPower());
+    _service.sendCommand(RadioCommands.getFilterWidthA());
+    _service.sendCommand(RadioCommands.getFilterWidthB());
 
     await Future.any([
       completer.future,
@@ -74,6 +76,8 @@ class RadioStateNotifier extends StateNotifier<RadioState> {
       _service.sendCommand(RadioCommands.getBandA());
       _service.sendCommand(RadioCommands.getBandB());
       _service.sendCommand(RadioCommands.getPower());
+      _service.sendCommand(RadioCommands.getFilterWidthA());
+      _service.sendCommand(RadioCommands.getFilterWidthB());
       await Future.delayed(const Duration(seconds: 1));
       return state.isConnected;
     });
@@ -82,6 +86,22 @@ class RadioStateNotifier extends StateNotifier<RadioState> {
   void setPower(int power) {
     state = state.copyWith(power: power);
     _service.sendCommand(RadioCommands.setPower(power));
+  }
+
+  void setFilterWidthA(int width) {
+    _logger.fine('Setting VFOA filter width to: $width');
+    state = state.copyWith(
+      vfoA: state.vfoA.copyWith(filterWidth: width),
+    );
+    _service.sendCommand(RadioCommands.setFilterWidthA(width));
+  }
+
+  void setFilterWidthB(int width) {
+    _logger.fine('Setting VFOB filter width to: $width');
+    state = state.copyWith(
+      vfoB: state.vfoB.copyWith(filterWidth: width),
+    );
+    _service.sendCommand(RadioCommands.setFilterWidthB(width));
   }
 
   void setFrequencyA(int frequency) {
@@ -215,6 +235,20 @@ class RadioStateNotifier extends StateNotifier<RadioState> {
       final power = RadioCommands.parsePower(response);
       _logger.fine('Power response: $response -> $power');
       state = state.copyWith(power: power);
+    } else if (response.startsWith('SH')) {
+      final width = RadioCommands.parseFilterWidth(response);
+      _logger.fine('Filter width response: $response -> $width');
+      if (response.contains('\$')) {
+        state = state.copyWith(
+          vfoB: state.vfoB.copyWith(filterWidth: width),
+        );
+        _logger.fine('Updated VFOB filter width to: ${state.vfoB.filterWidth}');
+      } else {
+        state = state.copyWith(
+          vfoA: state.vfoA.copyWith(filterWidth: width),
+        );
+        _logger.fine('Updated VFOA filter width to: ${state.vfoA.filterWidth}');
+      }
     }
   }
 

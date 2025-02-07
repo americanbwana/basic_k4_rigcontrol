@@ -7,6 +7,7 @@ import '../widgets/band_selector.dart';
 import '../widgets/frequency_input.dart';
 import '../widgets/connection_status.dart';
 import '../widgets/power_control.dart';
+import '../widgets/filter_control.dart';
 
 class RadioControlScreen extends ConsumerWidget {
   const RadioControlScreen({super.key});
@@ -52,6 +53,12 @@ class RadioControlScreen extends ConsumerWidget {
                           isVfoB: false,
                         ),
                         const SizedBox(height: 8),
+                        FilterControl(
+                          currentWidth: radioState.vfoA.filterWidth,
+                          onWidthChanged: (width) => ref.read(radioStateProvider.notifier).setFilterWidthA(width),
+                          isVfoB: false,
+                        ),
+                        const SizedBox(height: 8),
                         ModeSelector(
                           currentMode: radioState.vfoA.mode,
                           onModeSelected: (mode) => ref.read(radioStateProvider.notifier).setModeA(mode),
@@ -80,6 +87,12 @@ class RadioControlScreen extends ConsumerWidget {
                         FrequencyInput(
                           currentFrequency: radioState.vfoB.frequency,
                           onFrequencyChanged: (freq) => ref.read(radioStateProvider.notifier).setFrequencyB(freq),
+                          isVfoB: true,
+                        ),
+                        const SizedBox(height: 8),
+                        FilterControl(
+                          currentWidth: radioState.vfoB.filterWidth,
+                          onWidthChanged: (width) => ref.read(radioStateProvider.notifier).setFilterWidthB(width),
                           isVfoB: true,
                         ),
                         const SizedBox(height: 8),

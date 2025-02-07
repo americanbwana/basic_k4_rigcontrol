@@ -18,5 +18,24 @@ This is as is, no guarantees are provided.  .
 
 Build commands (WIP)
 
+Build commands (WIP)
+
 dart run build_runner clean
 dart run build_runner build --delete-conflicting-outputs
+
+
+# Make sure all changes are committed
+git add .
+git commit -m "Add power control feature"
+
+# Push feature branch to remote
+git push -u origin feature/power-control
+
+# Switch to master branch
+git checkout master
+
+# Merge feature branch into master
+git merge feature/power-control
+
+# Push master with merged changes
+git push origin master

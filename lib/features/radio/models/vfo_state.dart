@@ -9,5 +9,6 @@ class VfoState with _$VfoState {
     @Default(14074000) int frequency,
     @Default(RadioMode.usb) RadioMode mode,
     @Default(5) int band,
+    @Default(2400) int filterWidth,  // Add filter width in Hz
   }) = _VfoState;
 }
