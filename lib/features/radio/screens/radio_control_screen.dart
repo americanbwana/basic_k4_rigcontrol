@@ -4,6 +4,8 @@ import '../providers/radio_provider.dart';
 import '../widgets/vfo_display.dart';
 import '../widgets/mode_selector.dart';
 import '../widgets/band_grid.dart';
+import '../widgets/frequency_input.dart';
+import '../widgets/connection_status.dart';
 
 class RadioControlScreen extends ConsumerWidget {
   const RadioControlScreen({super.key});
@@ -16,10 +18,7 @@ class RadioControlScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('K4 Control'),
         actions: [
-          Icon(
-            radioState.isConnected ? Icons.wifi : Icons.wifi_off,
-            color: radioState.isConnected ? Colors.green : Colors.red,
-          ),
+          ConnectionStatus(isConnected: radioState.isConnected),
           const SizedBox(width: 16),
         ],
       ),
@@ -36,6 +35,12 @@ class RadioControlScreen extends ConsumerWidget {
                     VfoDisplay(
                       vfoState: radioState.vfoA,
                       label: 'VFO A',
+                    ),
+                    const SizedBox(height: 8),
+                    FrequencyInput(
+                      currentFrequency: radioState.vfoA.frequency,
+                      onFrequencyChanged: (freq) => ref.read(radioStateProvider.notifier).setFrequencyA(freq),
+                      isVfoB: false,
                     ),
                     const SizedBox(height: 8),
                     ModeSelector(
@@ -60,6 +65,12 @@ class RadioControlScreen extends ConsumerWidget {
                     VfoDisplay(
                       vfoState: radioState.vfoB,
                       label: 'VFO B',
+                    ),
+                    const SizedBox(height: 8),
+                    FrequencyInput(
+                      currentFrequency: radioState.vfoB.frequency,
+                      onFrequencyChanged: (freq) => ref.read(radioStateProvider.notifier).setFrequencyB(freq),
+                      isVfoB: true,
                     ),
                     const SizedBox(height: 8),
                     ModeSelector(

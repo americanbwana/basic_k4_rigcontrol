@@ -26,11 +26,7 @@ class RadioStateNotifier extends StateNotifier<RadioState> {
     try {
       await _service.connect();
       state = state.copyWith(isConnected: true);
-      
-      // Get initial state with await to ensure responses are processed
       await _getInitialState();
-      
-      // Start polling after initial state is set
       _service.responses.listen(_handleResponse);
       _startPolling();
     } catch (e) {
@@ -41,7 +37,7 @@ class RadioStateNotifier extends StateNotifier<RadioState> {
   Future<void> _getInitialState() async {
     final completer = Completer<void>();
     var responsesReceived = 0;
-    const expectedResponses = 6; // FA, FB, MD, MD$, BN, BN$
+    const expectedResponses = 6;
 
     void handleInitialResponse(String response) {
       _handleResponse(response);
@@ -51,10 +47,8 @@ class RadioStateNotifier extends StateNotifier<RadioState> {
       }
     }
 
-    // Listen for initial responses
     final subscription = _service.responses.listen(handleInitialResponse);
 
-    // Send initial queries
     _service.sendCommand(RadioCommands.getFrequencyA());
     _service.sendCommand(RadioCommands.getFrequencyB());
     _service.sendCommand(RadioCommands.getModeA());
@@ -62,13 +56,11 @@ class RadioStateNotifier extends StateNotifier<RadioState> {
     _service.sendCommand(RadioCommands.getBandA());
     _service.sendCommand(RadioCommands.getBandB());
 
-    // Wait for all responses or timeout
     await Future.any([
       completer.future,
       Future.delayed(const Duration(seconds: 2))
     ]);
 
-    // Clean up temporary listener
     await subscription.cancel();
   }
 
@@ -85,18 +77,34 @@ class RadioStateNotifier extends StateNotifier<RadioState> {
     });
   }
 
+  void setFrequencyA(int frequency) {
+    state = state.copyWith(
+      vfoA: state.vfoA.copyWith(frequency: frequency),
+    );
+    _service.sendCommand(RadioCommands.setFrequencyA(frequency));
+  }
+
+  void setFrequencyB(int frequency) {
+    state = state.copyWith(
+      vfoB: state.vfoB.copyWith(frequency: frequency),
+    );
+    _service.sendCommand(RadioCommands.setFrequencyB(frequency));
+  }
+
   void setModeA(RadioMode mode) {
+    _logger.fine('Setting VFOA mode to: ${mode.display}');
     state = state.copyWith(
       vfoA: state.vfoA.copyWith(mode: mode),
     );
-    _service.sendCommand('MD${mode.value};');
+    _service.sendCommand(RadioCommands.setModeA(mode.value));
   }
 
   void setModeB(RadioMode mode) {
+    _logger.fine('Setting VFOB mode to: ${mode.display}');
     state = state.copyWith(
       vfoB: state.vfoB.copyWith(mode: mode),
     );
-    _service.sendCommand('MD\$${mode.value};');
+    _service.sendCommand(RadioCommands.setModeB(mode.value));
   }
 
   void setBandA(int band) {
@@ -111,8 +119,8 @@ class RadioStateNotifier extends StateNotifier<RadioState> {
         frequency: defaultFreq,
       ),
     );
-    _service.sendCommand('BN${band.toString().padLeft(2, '0')};');
-    _service.sendCommand('FA${defaultFreq.toString().padLeft(11, '0')};');
+    _service.sendCommand(RadioCommands.setBandA(band));
+    _service.sendCommand(RadioCommands.setFrequencyA(defaultFreq));
   }
 
   void setBandB(int band) {
@@ -127,8 +135,8 @@ class RadioStateNotifier extends StateNotifier<RadioState> {
         frequency: defaultFreq,
       ),
     );
-    _service.sendCommand('BN\$${band.toString().padLeft(2, '0')};');
-    _service.sendCommand('FB${defaultFreq.toString().padLeft(11, '0')};');
+    _service.sendCommand(RadioCommands.setBandB(band));
+    _service.sendCommand(RadioCommands.setFrequencyB(defaultFreq));
   }
 
   void _handleResponse(String response) {
@@ -146,6 +154,10 @@ class RadioStateNotifier extends StateNotifier<RadioState> {
   void _handleSingleResponse(String response) {
     response = response.trim();
     _logger.fine('Raw response: "$response"');
+    
+    if (!response.endsWith(';')) {
+      response += ';';
+    }
 
     if (response.startsWith('FA')) {
       final freq = RadioCommands.parseFrequency(response);
@@ -170,10 +182,12 @@ class RadioStateNotifier extends StateNotifier<RadioState> {
         state = state.copyWith(
           vfoB: state.vfoB.copyWith(mode: mode),
         );
+        _logger.fine('Updated VFOB mode to: ${state.vfoB.mode.display}');
       } else {
         state = state.copyWith(
           vfoA: state.vfoA.copyWith(mode: mode),
         );
+        _logger.fine('Updated VFOA mode to: ${state.vfoA.mode.display}');
       }
     } else if (response.startsWith('BN')) {
       final match = RegExp(r'BN[\$]?(\d+)').firstMatch(response);
