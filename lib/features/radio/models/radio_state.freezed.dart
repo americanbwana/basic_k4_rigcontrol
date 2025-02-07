@@ -16,9 +16,10 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$RadioState {
+  bool get isConnected => throw _privateConstructorUsedError;
   VfoState get vfoA => throw _privateConstructorUsedError;
   VfoState get vfoB => throw _privateConstructorUsedError;
-  bool get isConnected => throw _privateConstructorUsedError;
+  int get power => throw _privateConstructorUsedError;
 
   /// Create a copy of RadioState
   /// with the given fields replaced by the non-null parameter values.
@@ -33,7 +34,7 @@ abstract class $RadioStateCopyWith<$Res> {
           RadioState value, $Res Function(RadioState) then) =
       _$RadioStateCopyWithImpl<$Res, RadioState>;
   @useResult
-  $Res call({VfoState vfoA, VfoState vfoB, bool isConnected});
+  $Res call({bool isConnected, VfoState vfoA, VfoState vfoB, int power});
 
   $VfoStateCopyWith<$Res> get vfoA;
   $VfoStateCopyWith<$Res> get vfoB;
@@ -54,11 +55,16 @@ class _$RadioStateCopyWithImpl<$Res, $Val extends RadioState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? isConnected = null,
     Object? vfoA = null,
     Object? vfoB = null,
-    Object? isConnected = null,
+    Object? power = null,
   }) {
     return _then(_value.copyWith(
+      isConnected: null == isConnected
+          ? _value.isConnected
+          : isConnected // ignore: cast_nullable_to_non_nullable
+              as bool,
       vfoA: null == vfoA
           ? _value.vfoA
           : vfoA // ignore: cast_nullable_to_non_nullable
@@ -67,10 +73,10 @@ class _$RadioStateCopyWithImpl<$Res, $Val extends RadioState>
           ? _value.vfoB
           : vfoB // ignore: cast_nullable_to_non_nullable
               as VfoState,
-      isConnected: null == isConnected
-          ? _value.isConnected
-          : isConnected // ignore: cast_nullable_to_non_nullable
-              as bool,
+      power: null == power
+          ? _value.power
+          : power // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 
@@ -103,7 +109,7 @@ abstract class _$$RadioStateImplCopyWith<$Res>
       __$$RadioStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({VfoState vfoA, VfoState vfoB, bool isConnected});
+  $Res call({bool isConnected, VfoState vfoA, VfoState vfoB, int power});
 
   @override
   $VfoStateCopyWith<$Res> get vfoA;
@@ -124,11 +130,16 @@ class __$$RadioStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? isConnected = null,
     Object? vfoA = null,
     Object? vfoB = null,
-    Object? isConnected = null,
+    Object? power = null,
   }) {
     return _then(_$RadioStateImpl(
+      isConnected: null == isConnected
+          ? _value.isConnected
+          : isConnected // ignore: cast_nullable_to_non_nullable
+              as bool,
       vfoA: null == vfoA
           ? _value.vfoA
           : vfoA // ignore: cast_nullable_to_non_nullable
@@ -137,10 +148,10 @@ class __$$RadioStateImplCopyWithImpl<$Res>
           ? _value.vfoB
           : vfoB // ignore: cast_nullable_to_non_nullable
               as VfoState,
-      isConnected: null == isConnected
-          ? _value.isConnected
-          : isConnected // ignore: cast_nullable_to_non_nullable
-              as bool,
+      power: null == power
+          ? _value.power
+          : power // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -149,10 +160,14 @@ class __$$RadioStateImplCopyWithImpl<$Res>
 
 class _$RadioStateImpl implements _RadioState {
   const _$RadioStateImpl(
-      {this.vfoA = const VfoState(),
+      {this.isConnected = false,
+      this.vfoA = const VfoState(),
       this.vfoB = const VfoState(),
-      this.isConnected = false});
+      this.power = 10});
 
+  @override
+  @JsonKey()
+  final bool isConnected;
   @override
   @JsonKey()
   final VfoState vfoA;
@@ -161,11 +176,11 @@ class _$RadioStateImpl implements _RadioState {
   final VfoState vfoB;
   @override
   @JsonKey()
-  final bool isConnected;
+  final int power;
 
   @override
   String toString() {
-    return 'RadioState(vfoA: $vfoA, vfoB: $vfoB, isConnected: $isConnected)';
+    return 'RadioState(isConnected: $isConnected, vfoA: $vfoA, vfoB: $vfoB, power: $power)';
   }
 
   @override
@@ -173,14 +188,15 @@ class _$RadioStateImpl implements _RadioState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$RadioStateImpl &&
+            (identical(other.isConnected, isConnected) ||
+                other.isConnected == isConnected) &&
             (identical(other.vfoA, vfoA) || other.vfoA == vfoA) &&
             (identical(other.vfoB, vfoB) || other.vfoB == vfoB) &&
-            (identical(other.isConnected, isConnected) ||
-                other.isConnected == isConnected));
+            (identical(other.power, power) || other.power == power));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, vfoA, vfoB, isConnected);
+  int get hashCode => Object.hash(runtimeType, isConnected, vfoA, vfoB, power);
 
   /// Create a copy of RadioState
   /// with the given fields replaced by the non-null parameter values.
@@ -193,16 +209,19 @@ class _$RadioStateImpl implements _RadioState {
 
 abstract class _RadioState implements RadioState {
   const factory _RadioState(
-      {final VfoState vfoA,
+      {final bool isConnected,
+      final VfoState vfoA,
       final VfoState vfoB,
-      final bool isConnected}) = _$RadioStateImpl;
+      final int power}) = _$RadioStateImpl;
 
+  @override
+  bool get isConnected;
   @override
   VfoState get vfoA;
   @override
   VfoState get vfoB;
   @override
-  bool get isConnected;
+  int get power;
 
   /// Create a copy of RadioState
   /// with the given fields replaced by the non-null parameter values.

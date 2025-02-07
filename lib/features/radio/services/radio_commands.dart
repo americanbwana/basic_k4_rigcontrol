@@ -1,6 +1,17 @@
 import '../models/radio_mode.dart';
 
 class RadioCommands {
+// add commands to get power state
+    static String getPower() => 'PC;';
+  static String setPower(int power) => 'PC${power.toString().padLeft(3, '0')};';
+  
+  static int parsePower(String response) {
+    final match = RegExp(r'PC(\d+);').firstMatch(response);
+    if (match != null) {
+      return int.parse(match.group(1)!);
+    }
+    return 10; // Default power
+  }
   // Commands to get current state
   static String getFrequencyA() => 'FA;';
   static String getFrequencyB() => 'FB;';

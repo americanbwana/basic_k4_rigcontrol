@@ -3,9 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/radio_provider.dart';
 import '../widgets/vfo_display.dart';
 import '../widgets/mode_selector.dart';
+import '../widgets/band_selector.dart';
 import '../widgets/frequency_input.dart';
 import '../widgets/connection_status.dart';
-import '../widgets/band_selector.dart';
+import '../widgets/power_control.dart';
 
 class RadioControlScreen extends ConsumerWidget {
   const RadioControlScreen({super.key});
@@ -25,69 +26,78 @@ class RadioControlScreen extends ConsumerWidget {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Column(
             children: [
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    VfoDisplay(
-                      vfoState: radioState.vfoA,
-                      label: 'VFO A',
-                      onFrequencyChanged: (freq) => ref.read(radioStateProvider.notifier).setFrequencyA(freq),
-                    ),
-                    const SizedBox(height: 8),
-                    FrequencyInput(
-                      currentFrequency: radioState.vfoA.frequency,
-                      onFrequencyChanged: (freq) => ref.read(radioStateProvider.notifier).setFrequencyA(freq),
-                      isVfoB: false,
-                    ),
-                    const SizedBox(height: 8),
-                    ModeSelector(
-                      currentMode: radioState.vfoA.mode,
-                      onModeSelected: (mode) => ref.read(radioStateProvider.notifier).setModeA(mode),
-                      isVfoB: false,
-                    ),
-                    const SizedBox(height: 8),
-                    BandSelector(
-                      currentBand: radioState.vfoA.band,
-                      onBandSelected: (band) => ref.read(radioStateProvider.notifier).setBandA(band),
-                      isVfoB: false,
-                    ),
-                  ],
-                ),
+              PowerControl(
+                currentPower: radioState.power,
+                onPowerChanged: (power) => ref.read(radioStateProvider.notifier).setPower(power),
               ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    VfoDisplay(
-                      vfoState: radioState.vfoB,
-                      label: 'VFO B',
-                      onFrequencyChanged: (freq) => ref.read(radioStateProvider.notifier).setFrequencyB(freq),
+              const SizedBox(height: 16),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        VfoDisplay(
+                          vfoState: radioState.vfoA,
+                          label: 'VFO A',
+                          onFrequencyChanged: (freq) => ref.read(radioStateProvider.notifier).setFrequencyA(freq),
+                        ),
+                        const SizedBox(height: 8),
+                        FrequencyInput(
+                          currentFrequency: radioState.vfoA.frequency,
+                          onFrequencyChanged: (freq) => ref.read(radioStateProvider.notifier).setFrequencyA(freq),
+                          isVfoB: false,
+                        ),
+                        const SizedBox(height: 8),
+                        ModeSelector(
+                          currentMode: radioState.vfoA.mode,
+                          onModeSelected: (mode) => ref.read(radioStateProvider.notifier).setModeA(mode),
+                          isVfoB: false,
+                        ),
+                        const SizedBox(height: 8),
+                        BandSelector(
+                          currentBand: radioState.vfoA.band,
+                          onBandSelected: (band) => ref.read(radioStateProvider.notifier).setBandA(band),
+                          isVfoB: false,
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 8),
-                    FrequencyInput(
-                      currentFrequency: radioState.vfoB.frequency,
-                      onFrequencyChanged: (freq) => ref.read(radioStateProvider.notifier).setFrequencyB(freq),
-                      isVfoB: true,
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        VfoDisplay(
+                          vfoState: radioState.vfoB,
+                          label: 'VFO B',
+                          onFrequencyChanged: (freq) => ref.read(radioStateProvider.notifier).setFrequencyB(freq),
+                        ),
+                        const SizedBox(height: 8),
+                        FrequencyInput(
+                          currentFrequency: radioState.vfoB.frequency,
+                          onFrequencyChanged: (freq) => ref.read(radioStateProvider.notifier).setFrequencyB(freq),
+                          isVfoB: true,
+                        ),
+                        const SizedBox(height: 8),
+                        ModeSelector(
+                          currentMode: radioState.vfoB.mode,
+                          onModeSelected: (mode) => ref.read(radioStateProvider.notifier).setModeB(mode),
+                          isVfoB: true,
+                        ),
+                        const SizedBox(height: 8),
+                        BandSelector(
+                          currentBand: radioState.vfoB.band,
+                          onBandSelected: (band) => ref.read(radioStateProvider.notifier).setBandB(band),
+                          isVfoB: true,
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 8),
-                    ModeSelector(
-                      currentMode: radioState.vfoB.mode,
-                      onModeSelected: (mode) => ref.read(radioStateProvider.notifier).setModeB(mode),
-                      isVfoB: true,
-                    ),
-                    const SizedBox(height: 8),
-                    BandSelector(
-                      currentBand: radioState.vfoB.band,
-                      onBandSelected: (band) => ref.read(radioStateProvider.notifier).setBandB(band),
-                      isVfoB: true,
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ],
           ),

@@ -15,3 +15,8 @@ Claude 3.5 Sonnect (Preview) was used to generate the basic code.
 But I've also used ChatGPT 4o with good results.
 
 This is as is, no guarantees are provided.  .
+
+Build commands (WIP)
+
+dart run build_runner clean
+dart run build_runner build --delete-conflicting-outputs

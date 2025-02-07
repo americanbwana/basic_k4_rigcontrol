@@ -37,7 +37,7 @@ class RadioStateNotifier extends StateNotifier<RadioState> {
   Future<void> _getInitialState() async {
     final completer = Completer<void>();
     var responsesReceived = 0;
-    const expectedResponses = 6;
+    const expectedResponses = 7; // FA, FB, MD, MD$, BN, BN$, PC
 
     void handleInitialResponse(String response) {
       _handleResponse(response);
@@ -55,6 +55,7 @@ class RadioStateNotifier extends StateNotifier<RadioState> {
     _service.sendCommand(RadioCommands.getModeB());
     _service.sendCommand(RadioCommands.getBandA());
     _service.sendCommand(RadioCommands.getBandB());
+    _service.sendCommand(RadioCommands.getPower());
 
     await Future.any([
       completer.future,
@@ -72,9 +73,15 @@ class RadioStateNotifier extends StateNotifier<RadioState> {
       _service.sendCommand(RadioCommands.getModeB());
       _service.sendCommand(RadioCommands.getBandA());
       _service.sendCommand(RadioCommands.getBandB());
+      _service.sendCommand(RadioCommands.getPower());
       await Future.delayed(const Duration(seconds: 1));
       return state.isConnected;
     });
+  }
+
+  void setPower(int power) {
+    state = state.copyWith(power: power);
+    _service.sendCommand(RadioCommands.setPower(power));
   }
 
   void setFrequencyA(int frequency) {
@@ -204,6 +211,10 @@ class RadioStateNotifier extends StateNotifier<RadioState> {
           );
         }
       }
+    } else if (response.startsWith('PC')) {
+      final power = RadioCommands.parsePower(response);
+      _logger.fine('Power response: $response -> $power');
+      state = state.copyWith(power: power);
     }
   }
 
