@@ -35,6 +35,7 @@ class RadioControlScreen extends ConsumerWidget {
                     VfoDisplay(
                       vfoState: radioState.vfoA,
                       label: 'VFO A',
+                      onFrequencyChanged: (freq) => ref.read(radioStateProvider.notifier).setFrequencyA(freq),
                     ),
                     const SizedBox(height: 8),
                     FrequencyInput(
@@ -65,6 +66,7 @@ class RadioControlScreen extends ConsumerWidget {
                     VfoDisplay(
                       vfoState: radioState.vfoB,
                       label: 'VFO B',
+                      onFrequencyChanged: (freq) => ref.read(radioStateProvider.notifier).setFrequencyB(freq),
                     ),
                     const SizedBox(height: 8),
                     FrequencyInput(
