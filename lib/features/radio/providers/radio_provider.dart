@@ -37,7 +37,7 @@ class RadioStateNotifier extends StateNotifier<RadioState> {
   Future<void> _getInitialState() async {
     final completer = Completer<void>();
     var responsesReceived = 0;
-    const expectedResponses = 9; // FA, FB, MD, MD$, BN, BN$, PC, SH, SH$
+    const expectedResponses = 11; // FA, FB, MD, MD$, BN, BN$, PC, BW, BW$, SM, SM$
 
     void handleInitialResponse(String response) {
       _handleResponse(response);
@@ -58,6 +58,8 @@ class RadioStateNotifier extends StateNotifier<RadioState> {
     _service.sendCommand(RadioCommands.getPower());
     _service.sendCommand(RadioCommands.getFilterWidthA());
     _service.sendCommand(RadioCommands.getFilterWidthB());
+    _service.sendCommand(RadioCommands.getSMeterA());
+    _service.sendCommand(RadioCommands.getSMeterB());
 
     await Future.any([
       completer.future,
@@ -78,7 +80,9 @@ class RadioStateNotifier extends StateNotifier<RadioState> {
       _service.sendCommand(RadioCommands.getPower());
       _service.sendCommand(RadioCommands.getFilterWidthA());
       _service.sendCommand(RadioCommands.getFilterWidthB());
-      await Future.delayed(const Duration(seconds: 1));
+      _service.sendCommand(RadioCommands.getSMeterA());
+      _service.sendCommand(RadioCommands.getSMeterB());
+      await Future.delayed(const Duration(milliseconds: 200));
       return state.isConnected;
     });
   }
@@ -242,12 +246,22 @@ class RadioStateNotifier extends StateNotifier<RadioState> {
         state = state.copyWith(
           vfoB: state.vfoB.copyWith(filterWidth: width),
         );
-        _logger.fine('Updated VFOB filter width to: ${state.vfoB.filterWidth}');
       } else {
         state = state.copyWith(
           vfoA: state.vfoA.copyWith(filterWidth: width),
         );
-        _logger.fine('Updated VFOA filter width to: ${state.vfoA.filterWidth}');
+      }
+    } else if (response.startsWith('SM')) {
+      final value = RadioCommands.parseSMeter(response);
+      _logger.fine('S-meter response: $response -> $value');
+      if (response.contains('\$')) {
+        state = state.copyWith(
+          vfoB: state.vfoB.copyWith(sMeter: value),
+        );
+      } else {
+        state = state.copyWith(
+          vfoA: state.vfoA.copyWith(sMeter: value),
+        );
       }
     }
   }

@@ -13,6 +13,10 @@ class RadioCommands {
     return 10; // Default power
   }
 
+// add S-meter commands
+  static String getSMeterA() => 'SM;';
+  static String getSMeterB() => 'SM\$;';
+
   // add filter width commands
    // Change SH to BW
   static String getFilterWidthA() => 'BW;';
@@ -36,6 +40,18 @@ class RadioCommands {
   static String setBandA(int band) => 'BN${band.toString().padLeft(2, '0')};';
   static String setBandB(int band) => 'BN\$${band.toString().padLeft(2, '0')};';
 
+  // add parse meter
+    static int parseSMeter(String response) {
+    if (!response.endsWith(';')) {
+      response += ';';
+    }
+    final match = RegExp(r'SM[\$]?(\d+);').firstMatch(response);
+    if (match != null) {
+      return int.parse(match.group(1)!);
+    }
+    return 0;
+  }
+  
   // Response parsing
   static int parseFrequency(String response) {
     if (!response.endsWith(';')) {

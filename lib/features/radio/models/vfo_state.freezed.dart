@@ -20,6 +20,7 @@ mixin _$VfoState {
   RadioMode get mode => throw _privateConstructorUsedError;
   int get band => throw _privateConstructorUsedError;
   int get filterWidth => throw _privateConstructorUsedError;
+  int get sMeter => throw _privateConstructorUsedError;
 
   /// Create a copy of VfoState
   /// with the given fields replaced by the non-null parameter values.
@@ -33,7 +34,8 @@ abstract class $VfoStateCopyWith<$Res> {
   factory $VfoStateCopyWith(VfoState value, $Res Function(VfoState) then) =
       _$VfoStateCopyWithImpl<$Res, VfoState>;
   @useResult
-  $Res call({int frequency, RadioMode mode, int band, int filterWidth});
+  $Res call(
+      {int frequency, RadioMode mode, int band, int filterWidth, int sMeter});
 }
 
 /// @nodoc
@@ -55,6 +57,7 @@ class _$VfoStateCopyWithImpl<$Res, $Val extends VfoState>
     Object? mode = null,
     Object? band = null,
     Object? filterWidth = null,
+    Object? sMeter = null,
   }) {
     return _then(_value.copyWith(
       frequency: null == frequency
@@ -73,6 +76,10 @@ class _$VfoStateCopyWithImpl<$Res, $Val extends VfoState>
           ? _value.filterWidth
           : filterWidth // ignore: cast_nullable_to_non_nullable
               as int,
+      sMeter: null == sMeter
+          ? _value.sMeter
+          : sMeter // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
@@ -85,7 +92,8 @@ abstract class _$$VfoStateImplCopyWith<$Res>
       __$$VfoStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int frequency, RadioMode mode, int band, int filterWidth});
+  $Res call(
+      {int frequency, RadioMode mode, int band, int filterWidth, int sMeter});
 }
 
 /// @nodoc
@@ -105,6 +113,7 @@ class __$$VfoStateImplCopyWithImpl<$Res>
     Object? mode = null,
     Object? band = null,
     Object? filterWidth = null,
+    Object? sMeter = null,
   }) {
     return _then(_$VfoStateImpl(
       frequency: null == frequency
@@ -123,6 +132,10 @@ class __$$VfoStateImplCopyWithImpl<$Res>
           ? _value.filterWidth
           : filterWidth // ignore: cast_nullable_to_non_nullable
               as int,
+      sMeter: null == sMeter
+          ? _value.sMeter
+          : sMeter // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -134,7 +147,8 @@ class _$VfoStateImpl implements _VfoState {
       {this.frequency = 14074000,
       this.mode = RadioMode.usb,
       this.band = 5,
-      this.filterWidth = 2400});
+      this.filterWidth = 2400,
+      this.sMeter = 0});
 
   @override
   @JsonKey()
@@ -148,10 +162,13 @@ class _$VfoStateImpl implements _VfoState {
   @override
   @JsonKey()
   final int filterWidth;
+  @override
+  @JsonKey()
+  final int sMeter;
 
   @override
   String toString() {
-    return 'VfoState(frequency: $frequency, mode: $mode, band: $band, filterWidth: $filterWidth)';
+    return 'VfoState(frequency: $frequency, mode: $mode, band: $band, filterWidth: $filterWidth, sMeter: $sMeter)';
   }
 
   @override
@@ -164,12 +181,13 @@ class _$VfoStateImpl implements _VfoState {
             (identical(other.mode, mode) || other.mode == mode) &&
             (identical(other.band, band) || other.band == band) &&
             (identical(other.filterWidth, filterWidth) ||
-                other.filterWidth == filterWidth));
+                other.filterWidth == filterWidth) &&
+            (identical(other.sMeter, sMeter) || other.sMeter == sMeter));
   }
 
   @override
   int get hashCode =>
-      Object.hash(runtimeType, frequency, mode, band, filterWidth);
+      Object.hash(runtimeType, frequency, mode, band, filterWidth, sMeter);
 
   /// Create a copy of VfoState
   /// with the given fields replaced by the non-null parameter values.
@@ -185,7 +203,8 @@ abstract class _VfoState implements VfoState {
       {final int frequency,
       final RadioMode mode,
       final int band,
-      final int filterWidth}) = _$VfoStateImpl;
+      final int filterWidth,
+      final int sMeter}) = _$VfoStateImpl;
 
   @override
   int get frequency;
@@ -195,6 +214,8 @@ abstract class _VfoState implements VfoState {
   int get band;
   @override
   int get filterWidth;
+  @override
+  int get sMeter;
 
   /// Create a copy of VfoState
   /// with the given fields replaced by the non-null parameter values.

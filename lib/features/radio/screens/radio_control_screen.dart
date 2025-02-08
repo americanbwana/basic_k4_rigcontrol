@@ -8,6 +8,7 @@ import '../widgets/frequency_input.dart';
 import '../widgets/connection_status.dart';
 import '../widgets/power_control.dart';
 import '../widgets/filter_control.dart';
+import '../widgets/s_meter.dart';
 
 class RadioControlScreen extends ConsumerWidget {
   const RadioControlScreen({super.key});
@@ -47,6 +48,11 @@ class RadioControlScreen extends ConsumerWidget {
                           onFrequencyChanged: (freq) => ref.read(radioStateProvider.notifier).setFrequencyA(freq),
                         ),
                         const SizedBox(height: 8),
+                        SMeter(
+                          value: radioState.vfoA.sMeter,
+                          isVfoB: false,
+                        ),
+                        const SizedBox(height: 8),
                         FrequencyInput(
                           currentFrequency: radioState.vfoA.frequency,
                           onFrequencyChanged: (freq) => ref.read(radioStateProvider.notifier).setFrequencyA(freq),
@@ -82,6 +88,11 @@ class RadioControlScreen extends ConsumerWidget {
                           vfoState: radioState.vfoB,
                           label: 'VFO B',
                           onFrequencyChanged: (freq) => ref.read(radioStateProvider.notifier).setFrequencyB(freq),
+                        ),
+                        const SizedBox(height: 8),
+                        SMeter(
+                          value: radioState.vfoB.sMeter,
+                          isVfoB: true,
                         ),
                         const SizedBox(height: 8),
                         FrequencyInput(
