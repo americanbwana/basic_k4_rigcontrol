@@ -235,7 +235,7 @@ class RadioStateNotifier extends StateNotifier<RadioState> {
       final power = RadioCommands.parsePower(response);
       _logger.fine('Power response: $response -> $power');
       state = state.copyWith(power: power);
-    } else if (response.startsWith('SH')) {
+    } else if (response.startsWith('BW')) {
       final width = RadioCommands.parseFilterWidth(response);
       _logger.fine('Filter width response: $response -> $width');
       if (response.contains('\$')) {

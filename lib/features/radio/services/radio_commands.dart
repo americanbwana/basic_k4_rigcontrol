@@ -14,10 +14,11 @@ class RadioCommands {
   }
 
   // add filter width commands
-  static String getFilterWidthA() => 'SH;';
-  static String getFilterWidthB() => 'SH\$;';
-  static String setFilterWidthA(int width) => 'SH${width.toString().padLeft(4, '0')};';
-  static String setFilterWidthB(int width) => 'SH\$${width.toString().padLeft(4, '0')};';
+   // Change SH to BW
+  static String getFilterWidthA() => 'BW;';
+  static String getFilterWidthB() => 'BW\$;';
+  static String setFilterWidthA(int width) => 'BW${(width/10).round().toString().padLeft(4, '0')};';
+  static String setFilterWidthB(int width) => 'BW\$${(width/10).round().toString().padLeft(4, '0')};';
   
   // Commands to get current state
   static String getFrequencyA() => 'FA;';
@@ -53,9 +54,9 @@ class RadioCommands {
     if (!response.endsWith(';')) {
       response += ';';
     }
-    final match = RegExp(r'SH[\$]?(\d+);').firstMatch(response);
+    final match = RegExp(r'BW[\$]?(\d+);').firstMatch(response);
     if (match != null) {
-      return int.parse(match.group(1)!);
+      return int.parse(match.group(1)!) * 10; // Multiply by 10 since radio returns value/10
     }
     return 2400;
   }
